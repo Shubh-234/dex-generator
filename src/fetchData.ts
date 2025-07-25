@@ -26,18 +26,3 @@ async function fetchCoinGeckoSolanaTokens() {
   }
 }
 
-async function run() {
-  console.log("Fetching from DexScreener...");
-  const dexTokens = await fetchDexScreener("sol");
-
-  console.log(`Fetched ${dexTokens.length} tokens from DexScreener`);
-  console.log(dexTokens.slice(0, 3));
-
-  console.log("\nFetching from GeckoTerminal...");
-  const geckoTokens = await fetchCoinGeckoSolanaTokens();
-
-  console.log(`Fetched ${geckoTokens.length} tokens from GeckoTerminal`);
-  console.log(geckoTokens.slice(0, 3));
-}
-
-run();
