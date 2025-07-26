@@ -13,7 +13,7 @@ async function fetchDexScreener(query: string) {
   }
 }
 
-async function fetchCoinGeckoSolanaTokens() {
+async function fetchCoinGeckoSolanaTokens(): Promise<any[]> {
   const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&platform=solana";
   try {
     const response = await axios.get(url);
@@ -26,3 +26,15 @@ async function fetchCoinGeckoSolanaTokens() {
   }
 }
 
+// fetchCoinGeckoSolanaTokens().then(tokens => 
+//   console.log("Fetched CoinGecko Solana tokens:", tokens.slice(0,2))
+// );
+
+// fetchDexScreener("solana").then(pairs =>
+//   console.log("Fetched DexScreener pairs:", pairs.slice(0,2))
+// );
+
+module.exports = {
+  fetchDexScreener,
+  fetchCoinGeckoSolanaTokens
+};
