@@ -45,3 +45,7 @@ aggregateTokens().then((result) => {
   console.log("Aggregated Tokens:");
   console.dir(result.slice(0, 5), { depth: null });
 });
+
+module.exports = {aggregateTokens}
+
+export {}

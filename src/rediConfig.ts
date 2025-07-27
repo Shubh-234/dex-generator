@@ -7,10 +7,12 @@ redis.on("connect", () => {
   console.log("Connected to Redis");
 });
 
-redis.on("error", (err: any) => {
+redis.on("error", (err: unknown) => {
   if(err instanceof Error){
     console.log("Redis error:", err.message);
   }
 });
 
 module.exports = redis;
+
+export {};
