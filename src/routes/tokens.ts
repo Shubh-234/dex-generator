@@ -16,7 +16,21 @@ const rateLimiter = rateLimit({
 
 router.get('/tokens',rateLimiter, async (req:any, res:any) => {
     try {
-        const tokens = await aggregateTokens();
+        let tokens = await aggregateTokens();
+        const {timePeriod, sortBy, sortOrder, limit, cursor} = req.query;
+        if(timePeriod === "1h"){
+            tokens = tokens.filter((token: any) => {
+                return token.priceChange1h !== null && token.priceChange1h !== undefined;
+            })
+        } else if ( timePeriod === "6h"){
+            tokens = tokens.filter((token: any) => {
+                return token.priceChange6h !== null && token.priceChange6h !== undefined;
+            })
+        }else if(timePeriod === "24h") {
+            tokens = tokens.filter((token: any) => {
+                return token.priceChange24h !== null && token.priceChange24h !== undefined;
+            })
+        }
         return res.status(200).json({
             success: true,
             data: tokens
