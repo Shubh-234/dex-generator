@@ -52,8 +52,8 @@ router.get('/tokens', rateLimiter, async (req: any, res: any) => {
         }
 
         const startIndex = cursor ? tokens.findIndex((token: any) => token.symbol === cursor) + 1 : 0;
+        const paginatedTokens = limit ? tokens.slice(startIndex, startIndex + Number(limit)) :tokens.slice(startIndex);
 
-        const paginatedTokens = tokens.slice(startIndex, startIndex + Number(limit));
         const nextCursor = paginatedTokens.length === Number(limit)
             ? paginatedTokens[paginatedTokens.length - 1].symbol
             : null;
