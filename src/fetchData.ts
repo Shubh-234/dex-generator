@@ -21,6 +21,7 @@ export async function fetchCoinGeckoSolanaTokens(): Promise<any[]> {
   } catch (err) {
     if (err instanceof Error) {
       console.error("CoinGecko fetch error:", err.message);
+      console.log(err);
     }
     return [];
   }
