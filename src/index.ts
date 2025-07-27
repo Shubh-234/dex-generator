@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import http from 'http';
 import {initSocket} from './socketServer'
 import tokensRoute from './routes/tokens';
+import startScheduler from './startScheduler'
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,8 +14,7 @@ dotenv.config({path : path.resolve(__dirname, "../.env")}   );
 
 const server = http.createServer(express());
 initSocket(server);
-
-
+startScheduler();
 const app = express();
 
 
