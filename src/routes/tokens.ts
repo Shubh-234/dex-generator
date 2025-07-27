@@ -5,47 +5,58 @@ import rateLimit from 'express-rate-limit';
 const router = express.Router();
 
 const rateLimiter = rateLimit({
-    windowMs: 60 * 1000 *30,
-    max: 10, 
+    windowMs: 60 * 1000 * 30,
+    max: 10,
     message: {
         success: false,
         message: "Too many requests, please try again later."
     }
 })
 
-
-router.get('/tokens',rateLimiter, async (req:any, res:any) => {
+router.get('/tokens', rateLimiter, async (req: any, res: any) => {
     try {
         let tokens = await aggregateTokens();
-        const {timePeriod, sortBy, sortOrder, limit, cursor} = req.query;
-        if(timePeriod === "1h"){
+        const { timePeriod, sortBy, sortOrder, limit, cursor } = req.query;
+
+        if (timePeriod === "1h") {
             tokens = tokens.filter((token: any) => {
                 return token.priceChange1h !== null && token.priceChange1h !== undefined;
             })
-        } else if ( timePeriod === "6h"){
+        } else if (timePeriod === "6h") {
             tokens = tokens.filter((token: any) => {
                 return token.priceChange6h !== null && token.priceChange6h !== undefined;
             })
-        }else if(timePeriod === "24h") {
+        } else if (timePeriod === "24h") {
             tokens = tokens.filter((token: any) => {
                 return token.priceChange24h !== null && token.priceChange24h !== undefined;
             })
         }
 
-        if(sortBy && sortOrder) {
+        if (sortBy && sortOrder && ['asc', 'desc'].includes(sortOrder)) {
+            tokens = tokens.filter((token: any) => token[sortBy] !== null && token[sortBy] !== undefined);
+
             tokens.sort((a: any, b: any) => {
-                if(sortOrder === "asc") {
-                    return a[sortBy] - b[sortBy];
-                } else {
-                    return b[sortBy] - a[sortBy];
+                const aValue = a[sortBy];
+                const bValue = b[sortBy];
+
+                if (typeof aValue === 'string' && typeof bValue === 'string') {
+                    return sortOrder === "asc"
+                        ? aValue.localeCompare(bValue)
+                        : bValue.localeCompare(aValue);
                 }
+
+                return sortOrder === "asc"
+                    ? aValue - bValue
+                    : bValue - aValue;
             });
         }
 
         const startIndex = cursor ? tokens.findIndex((token: any) => token.symbol === cursor) + 1 : 0;
 
         const paginatedTokens = tokens.slice(startIndex, startIndex + Number(limit));
-        const nextCursor = paginatedTokens.length === Number(limit) ? paginatedTokens[paginatedTokens.length - 1].symbol : null;
+        const nextCursor = paginatedTokens.length === Number(limit)
+            ? paginatedTokens[paginatedTokens.length - 1].symbol
+            : null;
 
         return res.status(200).json({
             success: true,
