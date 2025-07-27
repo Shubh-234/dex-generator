@@ -32,7 +32,9 @@ This project aggregates real-time Solana token data from **DexScreener** and **C
 ### PORT=3000
 ### REDIS_URL=redis://localhost:6379
 
-### 5. Start the server using command npx tsx src/index.ts
+### 5. Start the server using command npx tsx src/index.ts### Live render project (data fetched): https://dex-generator.onrender.com/api/tokens
+
+## Live render project (data fetched): https://dex-generator.onrender.com/api/tokens
 
 
 
