@@ -13,6 +13,4 @@ redis.on("error", (err: unknown) => {
   }
 });
 
-module.exports = redis;
-
-export {};
+export default redis;

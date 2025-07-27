@@ -1,9 +1,10 @@
-const express = require('express');
+import express from 'express';
+import { aggregateTokens } from '../aggregator';
+
 const router = express.Router();
 
-const {aggregateTokens} = require('../aggregator.ts');
 
-router.get('/token', async (req:any, res:any) => {
+router.get('/tokens', async (req:any, res:any) => {
     try {
         const tokens = await aggregateTokens();
         return res.status(200).json({
@@ -19,8 +20,6 @@ router.get('/token', async (req:any, res:any) => {
     }
 })
 
-module.exports = router;
-
-export {};
+export default router;
 
 

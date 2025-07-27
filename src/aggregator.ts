@@ -1,6 +1,5 @@
-const fetchDataFile = require('./fetchData');
-const fetchDataDex = fetchDataFile.fetchDexScreener;
-const fetchDataCoinGecko = fetchDataFile.fetchCoinGeckoSolanaTokens;
+import {fetchDexScreener} from "./fetchData";
+import {fetchCoinGeckoSolanaTokens} from "./fetchData";
 
 function matchTokens(dsToken: any, cgToken: any) {
   return (
@@ -9,7 +8,7 @@ function matchTokens(dsToken: any, cgToken: any) {
   );
 }
 
-function aggregateTokenData(dsToken: any, cgToken: any) {
+export default function aggregateTokenData(dsToken: any, cgToken: any) {
   return {
     name: dsToken.baseToken.name,
     symbol: dsToken.baseToken.symbol,
@@ -25,27 +24,27 @@ function aggregateTokenData(dsToken: any, cgToken: any) {
   };
 }
 
-async function aggregateTokens() {
+export async function aggregateTokens() {
   const [dsPairs, cgTokens] = await Promise.all([
-    fetchDataDex("solana"),
-    fetchDataCoinGecko(),
+    fetchDexScreener("solana"),
+    fetchCoinGeckoSolanaTokens(),
   ]);
 
   const aggregated = [];
 
   for (const dsToken of dsPairs) {
-    const match = cgTokens.find((cgToken: any) => matchTokens(dsToken, cgToken));
+    if(!dsToken || !dsToken?.baseToken || !dsToken?.baseToken?.name){
+      console.log("Skipping invalid DexScreener token:", dsToken);
+      continue;
+    }
+    const match = cgTokens.find((cgToken) => matchTokens(dsToken, cgToken));
     aggregated.push(aggregateTokenData(dsToken, match));
   }
 
   return aggregated;
 }
 
-aggregateTokens().then((result) => {
-  console.log("Aggregated Tokens:");
-  console.dir(result.slice(0, 5), { depth: null });
-});
-
-module.exports = {aggregateTokens}
-
-export {}
+// aggregateTokens().then((result) => {
+//   console.log("Aggregated Tokens:");
+//   console.dir(result.slice(0, 5), { depth: null });
+// });

@@ -1,6 +1,6 @@
 
-const axios = require("axios");
-async function fetchDexScreener(query: string) {
+import axios from "axios";
+export async function fetchDexScreener(query: string) {
   const url = `https://api.dexscreener.com/latest/dex/search?q=${query}`;
   try {
     const response = await axios.get(url);
@@ -13,7 +13,7 @@ async function fetchDexScreener(query: string) {
   }
 }
 
-async function fetchCoinGeckoSolanaTokens(): Promise<any[]> {
+export async function fetchCoinGeckoSolanaTokens(): Promise<any[]> {
   const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&platform=solana";
   try {
     const response = await axios.get(url);
@@ -26,15 +26,10 @@ async function fetchCoinGeckoSolanaTokens(): Promise<any[]> {
   }
 }
 
-// fetchCoinGeckoSolanaTokens().then(tokens => 
-//   console.log("Fetched CoinGecko Solana tokens:", tokens.slice(0,2))
-// );
+fetchCoinGeckoSolanaTokens().then(tokens => 
+  console.log("Fetched CoinGecko Solana tokens:", tokens.slice(0,2))
+);
 
-// fetchDexScreener("solana").then(pairs =>
-//   console.log("Fetched DexScreener pairs:", pairs.slice(0,2))
-// );
-
-module.exports = {
-  fetchDexScreener,
-  fetchCoinGeckoSolanaTokens
-};
+fetchDexScreener("solana").then(pairs =>
+  console.log("Fetched DexScreener pairs:", pairs.slice(0,2))
+);
