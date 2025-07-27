@@ -6,7 +6,7 @@ const router = express.Router();
 
 const rateLimiter = rateLimit({
     windowMs: 60 * 1000 *30,
-    max: 10, // limit each IP to 50 requests per 30 minutes
+    max: 10, 
     message: {
         success: false,
         message: "Too many requests, please try again later."
