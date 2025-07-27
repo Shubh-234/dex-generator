@@ -3,7 +3,7 @@ import {fetchCoinGeckoSolanaTokens} from "./fetchData";
 import redis from "./rediConfig";
 
 const CACHE_KEY = "aggregated_tokens";
-const CACHE_TTL = 60 * 30; // 30 minutes  
+const CACHE_TTL = 30; //30 second  
 
 function matchTokens(dsToken: any, cgToken: any) {
   return (
