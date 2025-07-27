@@ -31,6 +31,16 @@ router.get('/tokens',rateLimiter, async (req:any, res:any) => {
                 return token.priceChange24h !== null && token.priceChange24h !== undefined;
             })
         }
+
+        if(sortBy && sortOrder) {
+            tokens.sort((a: any, b: any) => {
+                if(sortOrder === "asc") {
+                    return a[sortBy] - b[sortBy];
+                } else {
+                    return b[sortBy] - a[sortBy];
+                }
+            });
+        }
         return res.status(200).json({
             success: true,
             data: tokens
