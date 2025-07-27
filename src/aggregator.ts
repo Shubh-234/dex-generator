@@ -1,5 +1,9 @@
 import {fetchDexScreener} from "./fetchData";
 import {fetchCoinGeckoSolanaTokens} from "./fetchData";
+import redis from "./rediConfig";
+
+const CACHE_KEY = "aggregated_tokens";
+const CACHE_TTL = 60 * 30; // 30 minutes  
 
 function matchTokens(dsToken: any, cgToken: any) {
   return (
@@ -25,6 +29,11 @@ export default function aggregateTokenData(dsToken: any, cgToken: any) {
 }
 
 export async function aggregateTokens() {
+  const cachedData = await redis.get(CACHE_KEY);
+  if(cachedData){
+    console.log("cache hit");
+    return JSON.parse(cachedData);
+  }
   const [dsPairs, cgTokens] = await Promise.all([
     fetchDexScreener("solana"),
     fetchCoinGeckoSolanaTokens(),
@@ -40,6 +49,9 @@ export async function aggregateTokens() {
     const match = cgTokens.find((cgToken) => matchTokens(dsToken, cgToken));
     aggregated.push(aggregateTokenData(dsToken, match));
   }
+
+  console.log("setting cache in redis");
+  await redis.set(CACHE_KEY, JSON.stringify(aggregated), 'EX', CACHE_TTL);
 
   return aggregated;
 }

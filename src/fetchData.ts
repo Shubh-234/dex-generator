@@ -26,10 +26,10 @@ export async function fetchCoinGeckoSolanaTokens(): Promise<any[]> {
   }
 }
 
-fetchCoinGeckoSolanaTokens().then(tokens => 
-  console.log("Fetched CoinGecko Solana tokens:", tokens.slice(0,2))
-);
+// fetchCoinGeckoSolanaTokens().then(tokens => 
+//   console.log("Fetched CoinGecko Solana tokens:", tokens.slice(0,2))
+// );
 
-fetchDexScreener("solana").then(pairs =>
-  console.log("Fetched DexScreener pairs:", pairs.slice(0,2))
-);
+// fetchDexScreener("solana").then(pairs =>
+//   console.log("Fetched DexScreener pairs:", pairs.slice(0,2))
+// );
